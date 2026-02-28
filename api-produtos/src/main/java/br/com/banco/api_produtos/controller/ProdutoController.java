@@ -1,7 +1,8 @@
 package br.com.banco.api_produtos.controller;
 
-import java.util.ArrayList;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,10 +20,11 @@ import br.com.banco.api_produtos.service.ProdutoService;
 @RequestMapping("/produtos")
 
 public class ProdutoController {
-    private ProdutoService service = new ProdutoService();
+    @Autowired
+    private ProdutoService service;
 
     @GetMapping
-    public ArrayList<Produto> listarTodos() {
+    public List<Produto> listarTodos() {
         return service.listarTodos();
     }
 
@@ -36,7 +38,7 @@ public class ProdutoController {
         return service.cadastrar(dto);
     }
 
-    @PutMapping ("/{id}")
+    @PutMapping("/{id}")
     public Produto atualizar(@PathVariable Long id, @RequestBody ProdutoDTO dto) {
         return service.atualizar(id, dto);
     }
