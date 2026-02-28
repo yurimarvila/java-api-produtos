@@ -16,6 +16,8 @@ import br.com.banco.api_produtos.dto.ProdutoDTO;
 import br.com.banco.api_produtos.model.Produto;
 import br.com.banco.api_produtos.service.ProdutoService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/produtos")
 
@@ -34,12 +36,12 @@ public class ProdutoController {
     }
 
     @PostMapping
-    public Produto cadastrar(@RequestBody ProdutoDTO dto) {
+    public Produto cadastrar(@RequestBody @Valid ProdutoDTO dto) {
         return service.cadastrar(dto);
     }
 
     @PutMapping("/{id}")
-    public Produto atualizar(@PathVariable Long id, @RequestBody ProdutoDTO dto) {
+    public Produto atualizar(@PathVariable Long id, @RequestBody @Valid ProdutoDTO dto) {
         return service.atualizar(id, dto);
     }
 
