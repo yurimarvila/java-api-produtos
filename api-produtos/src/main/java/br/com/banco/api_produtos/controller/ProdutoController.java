@@ -3,6 +3,7 @@ package br.com.banco.api_produtos.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,27 +27,39 @@ public class ProdutoController {
     private ProdutoService service;
 
     @GetMapping
-    public List<Produto> listarTodos() {
-        return service.listarTodos();
+    public ResponseEntity<List<Produto>> listarTodos() {
+        return ResponseEntity.ok(service.listarTodos());
     }
 
     @GetMapping("/{id}")
-    public Produto buscarPorId(@PathVariable Long id) {
-        return service.buscarPorId(id);
+    public ResponseEntity<Produto> buscarPorId(@PathVariable Long id) {
+        Produto produto = service.buscarPorId(id);
+        if (produto == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(produto);
     }
 
     @PostMapping
-    public Produto cadastrar(@RequestBody @Valid ProdutoDTO dto) {
-        return service.cadastrar(dto);
+    public ResponseEntity<Produto> cadastrar(@RequestBody @Valid ProdutoDTO dto) {
+        Produto produto = service.cadastrar(dto);
+        return ResponseEntity.status(201).body(produto);
     }
 
     @PutMapping("/{id}")
-    public Produto atualizar(@PathVariable Long id, @RequestBody @Valid ProdutoDTO dto) {
-        return service.atualizar(id, dto);
+    public ResponseEntity<Produto> atualizar(@PathVariable Long id, @RequestBody @Valid ProdutoDTO dto) {
+        Produto produto = service.atualizar(id, dto);
+        if (produto == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(produto);
     }
 
     @DeleteMapping("/{id}")
-    public boolean deletar(@PathVariable Long id) {
-        return service.deletar(id);
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        if (service.deletar(id) == true) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }
